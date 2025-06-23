@@ -1,0 +1,28 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:../test.db"
+}
+
+generator client {
+  provider             = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+model Activity {
+  name            String        @id
+  description     String
+  schedule        String
+  max_participants Int
+  participants    Participant[]
+
+  @@map("activities")
+}
+
+model Participant {
+  activity_name String    @map("activity_name")
+  email       String
+  activity    Activity @relation(fields: [activity_name], references: [name])
+
+  @@id([activity_name, email])
+  @@map("participants")
+}
